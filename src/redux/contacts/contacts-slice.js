@@ -4,7 +4,7 @@ import {
   addContact,
   removeContact,
 } from './contacts-operations';
-
+import { pendingCallback, rejectedCallback } from 'shared/helpers/redux';
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState: {
@@ -13,39 +13,24 @@ const contactsSlice = createSlice({
     error: null,
   },
   extraReducers: {
-    [fetchContacts.pending]: store => {
-      store.isLoading = true;
-    },
+    [fetchContacts.pending]: pendingCallback,
     [fetchContacts.fulfilled]: (store, { payload }) => {
       store.isLoading = false;
       store.items = payload;
     },
-    [fetchContacts.rejected]: (store, { payload }) => {
-      store.isLoading = true;
-      store.error = payload;
-    },
-    [addContact.pending]: store => {
-      store.isLoading = true;
-    },
+    [fetchContacts.rejected]: rejectedCallback,
+    [addContact.pending]: pendingCallback,
     [addContact.fulfilled]: (store, { payload }) => {
       store.isLoading = false;
       store.items.push(payload);
     },
-    [addContact.rejected]: (store, { payload }) => {
-      store.isLoading = false;
-      store.error = payload;
-    },
-    [removeContact.pending]: store => {
-      store.isLoading = true;
-    },
+    [addContact.rejected]: rejectedCallback,
+    [removeContact.pending]: pendingCallback,
     [removeContact.fulfilled]: (store, { payload }) => {
       store.isLoading = false;
       store.items = store.items.filter(item => item.id !== payload);
     },
-    [removeContact.rejected]: (store, { payload }) => {
-      store.isLoading = false;
-      store.error = payload;
-    },
+    [removeContact.rejected]: rejectedCallback,
   },
 });
 export default contactsSlice.reducer;
