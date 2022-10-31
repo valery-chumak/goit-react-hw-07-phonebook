@@ -1,31 +1,38 @@
 import { useSelector, useDispatch } from 'react-redux';
 import React from 'react';
+import { useEffect } from 'react';
 import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Section from './Section/Section';
 import css from '../components/ContactForm/ContactForm.module.css';
-import { addContact, removeContact } from 'redux/contacts/contacts-slice';
+import {
+  fetchContacts,
+  addContact,
+  removeContact,
+} from 'redux/contacts/contacts-operations';
 import { setFilter } from 'redux/filter/filter-slice';
 import { getFilter } from 'redux/filter/filter-selectors';
-import { getFilteredContacts } from 'redux/contacts/contacts-selectors';
+import {
+  getFilteredContacts,
+  getState,
+} from 'redux/contacts/contacts-selectors';
 
 export default function App() {
   const contacts = useSelector(getFilteredContacts);
   const filter = useSelector(getFilter);
+  const { isLoading, error } = useSelector(getState);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const handleInputChange = event => {
     const { value } = event.target;
     dispatch(setFilter(value));
   };
-  const isDuplicate = ({ name }) => {
-    const result = contacts.find(item => item.name === name);
-    return result;
-  };
+
   const onAddContact = contact => {
-    if (isDuplicate(contact)) {
-      return alert(`${contact.name} is already in contacts`);
-    }
     const action = addContact(contact);
     dispatch(action);
   };
@@ -53,7 +60,11 @@ export default function App() {
             onChange={handleInputChange}
           />
         </label>
-        <ContactList items={contacts} removeContact={onRemoveContact} />
+        {!isLoading && contacts.length > 0 && (
+          <ContactList items={contacts} removeContact={onRemoveContact} />
+        )}
+        {isLoading && <p>...loading</p>}
+        {error && <p>oops, something went wrong</p>}
       </Section>
     </>
   );
