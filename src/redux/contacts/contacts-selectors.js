@@ -1,9 +1,9 @@
-export const getContacts = ({ contacts }) => contacts.items;
-export const getState = ({ contacts }) => ({
+export const selectContacts = ({ contacts }) => contacts.items;
+export const selectState = ({ contacts }) => ({
   isLoading: contacts.isLoading,
   error: contacts.error,
 });
-export const getFilteredContacts = ({ filter, contacts }) => {
+export const selectFilteredContacts = ({ filter, contacts }) => {
   if (!filter) {
     return contacts.items;
   }

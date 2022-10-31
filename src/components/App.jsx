@@ -12,16 +12,16 @@ import {
   removeContact,
 } from 'redux/contacts/contacts-operations';
 import { setFilter } from 'redux/filter/filter-slice';
-import { getFilter } from 'redux/filter/filter-selectors';
+import { selectFilter } from 'redux/filter/filter-selectors';
 import {
-  getFilteredContacts,
-  getState,
+  selectFilteredContacts,
+  selectState,
 } from 'redux/contacts/contacts-selectors';
 
 export default function App() {
-  const contacts = useSelector(getFilteredContacts);
-  const filter = useSelector(getFilter);
-  const { isLoading, error } = useSelector(getState);
+  const contacts = useSelector(selectFilteredContacts);
+  const filter = useSelector(selectFilter);
+  const { isLoading, error } = useSelector(selectState);
   const dispatch = useDispatch();
 
   useEffect(() => {
