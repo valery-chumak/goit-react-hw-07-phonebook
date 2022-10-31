@@ -3,6 +3,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
+import Loader from './Loader/Loader';
 import Section from './Section/Section';
 import css from '../components/ContactForm/ContactForm.module.css';
 import {
@@ -63,7 +64,7 @@ export default function App() {
         {!isLoading && contacts.length > 0 && (
           <ContactList items={contacts} removeContact={onRemoveContact} />
         )}
-        {isLoading && <p>...loading</p>}
+        {isLoading && <Loader />}
         {error && <p>oops, something went wrong</p>}
       </Section>
     </>
